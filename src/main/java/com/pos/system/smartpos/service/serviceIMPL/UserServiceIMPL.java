@@ -6,6 +6,7 @@ import com.pos.system.smartpos.dto.requests.UserUpdateRequestDTO;
 import com.pos.system.smartpos.dto.response.UserLoginResponseDTO;
 import com.pos.system.smartpos.dto.response.UserUpdateResponseDTO;
 import com.pos.system.smartpos.entity.User;
+import com.pos.system.smartpos.exception.NotFoundException;
 import com.pos.system.smartpos.repository.UserRepo;
 import com.pos.system.smartpos.service.UserService;
 import com.pos.system.smartpos.utility.mappers.UserMapper;
@@ -48,20 +49,19 @@ public class UserServiceIMPL implements UserService {
             }
 
         }else{
-            throw new RuntimeException("User does not exist");
+            throw new NotFoundException("User does not exist");
         }
 
     }
 
     @Override
     public UserLoginResponseDTO getUser(int userId) {
-
         if(userRepo.existsById(userId)){
             User user = userRepo.getUserByUserIdEquals(userId);
             UserLoginResponseDTO userLoginResponseDTO= userMapper.userEntityToLoginResponseDTO(user);
             return userLoginResponseDTO;
         }else {
-            throw new RuntimeException("User does not exist");
+            throw new NotFoundException("User does not exist");
         }
     }
 
@@ -90,7 +90,7 @@ public class UserServiceIMPL implements UserService {
             UserUpdateResponseDTO userUpdateResponseDTO= userMapper.userUpdateEntityToUpdateResponseDTO(updatedUser);
             return userUpdateResponseDTO;
         }else{
-            throw new RuntimeException("User does not exist");
+            throw new NotFoundException("User does not exist");
         }
     }
 
@@ -100,7 +100,7 @@ public class UserServiceIMPL implements UserService {
             userRepo.deleteById(userId);
             return "User deleted successfully: "+ userId;
         }else{
-            throw new RuntimeException("User does not exist");
+            throw new NotFoundException("User does not exist");
         }
     }
 }
